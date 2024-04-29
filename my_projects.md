@@ -1,4 +1,4 @@
-1 . Usecase 1:
+1. Usecase 1:
      Given jioTV data of customers profile details, containing two tables one for inidividual data and another for corporate data. I have joined the two tables based on customer id
      and written to csv using spark and the csv stored in hdfs is sent to SFTP server using NiFi flow
      Made hive script to create external table on top of csv
