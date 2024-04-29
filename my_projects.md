@@ -10,3 +10,5 @@
 2. Usecase 2:
      Given jio Cinema data, exploded the data in a json column into multiple columns using UDFs in spark, and created table on top of it and extracted the list of top 3 actors, top 3 directors using rank in sql
 
+3. Usecase 3:
+     Read data from kafka topic using spark streaming and processed the data and stored it to csv file.
