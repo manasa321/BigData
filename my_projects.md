@@ -6,7 +6,6 @@
      Created and scheduled dags to create table once, and update the table daily
      Generated and analysed stats of spark-jobs in production and checked the health of job using yarn, wxm and grafana
 
-
 2. Usecase 2:
      Given jio Cinema data, exploded the data in a json column into multiple columns using UDFs in spark, and created table on top of it and extracted the list of top 3 actors, top 3 directors using rank in sql
 
