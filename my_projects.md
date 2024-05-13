@@ -11,3 +11,6 @@
 
 3. Usecase 3:
      Read data from kafka topic using spark as key-value pairs, extracted the values in json format and splitted into columns and stored into hdfs location.
+
+4. Usecase 4:
+     A table in jiomedia has less than 100 rows. So it has to be saved in mysql server instead of hive. Made a connection request to mysql server, created table there and inserted data into it from dataframe.
