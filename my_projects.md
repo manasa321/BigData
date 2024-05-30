@@ -44,7 +44,14 @@
 
 ## Pattern Recognition& Machine learning(jul-nov’22) ##
 ```
-
+mplemented various machine learning algorithms in Python: Developed and applied logistic regression, decision trees, Support Vector Machines (SVM), Random Forest Classifier, AdaBoost, k-Nearest Neighbors (KNN), binary and multiclass Bayes classifiers, and neural networks as part of the Pattern Recognition and Machine Learning course.
 ```
+
+## Database Management Systems(jul-nov’22) ##
+```
+1. Created and populated a comprehensive database for a donation box domain, ensuring efficient data organization and retrieval.
+2. Developed and executed complex SQL queries to manage, retrieve, and analyze donation data, enhancing data-driven decision-making.
+```
+
 
 
