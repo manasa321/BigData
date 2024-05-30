@@ -18,8 +18,7 @@
 
 # Course Projects #
 
-## Compiler Design Course
-(Aug’21-Nov’22) ##
+## Compiler Design Course(Aug’21-Nov’22) ##
 
 ```
 1. Developed a 5-pass compiler in Java to translate MiniJava programs into progressively lower-level representations, culminating in MIPS assembly language.
@@ -27,8 +26,7 @@
 ```
 
 
-## Computer Architecture 
-(Jan’21-May’21) ##
+## Computer Architecture (Jan’21-May’21) ##
 ```
 1. Simulated a 5-stage scalar pipelined processor based on RISC architecture using C++.
 2. Utilized multithreading to parallelize the simulation of each stage, enhancing overall execution speed.
@@ -44,7 +42,7 @@
 
 ## Pattern Recognition& Machine learning(jul-nov’22) ##
 ```
-mplemented various machine learning algorithms in Python: Developed and applied logistic regression, decision trees, Support Vector Machines (SVM), Random Forest Classifier, AdaBoost, k-Nearest Neighbors (KNN), binary and multiclass Bayes classifiers, and neural networks as part of the Pattern Recognition and Machine Learning course.
+Implemented various machine learning algorithms in Python: Developed and applied logistic regression, decision trees, Support Vector Machines (SVM), Random Forest Classifier, AdaBoost, k-Nearest Neighbors (KNN), binary and multiclass Bayes classifiers, and neural networks as part of the Pattern Recognition and Machine Learning course.
 ```
 
 ## Database Management Systems(jul-nov’22) ##
