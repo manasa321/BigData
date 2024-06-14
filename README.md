@@ -215,3 +215,108 @@ int main() {
     return 0;
 }
 ```
+
+# Q3 #
+```
+// Online C++ compiler to run C++ program online
+#include <iostream>
+using namespace std;
+
+struct record{
+    string type,
+    string symbol,
+    string price,
+    string quantity,
+    string expiry date,
+    string strike price,
+    string amendtime,
+    string id,
+    string parentid
+};
+
+
+void splitInpute(string input_file, int x){
+    ifstream infile(input_file);
+    
+    map<string, record> records;
+    map<string, vector<record>> children;
+    string line;
+    
+    while(getline(infile, line)){
+        stringstream ss(line);
+        string type, symbol, price, quantity, expiry date, string strike price, string amendtime, string id, string parentid;
+        
+    
+        getline(ss, type, ',');
+        getline(ss, symbol, ',');
+        getline(ss, price, ',');
+        getline(ss, quantity, ',');
+        getline(ss, expiry date, ',');
+        getline(ss, strike price, ',');
+        getline(ss, amendtime, ',');
+        getline(ss, id, ',');
+        getline(ss, parentid, ',');
+        
+        record r(type, symbol, price, quantity, expiry date, string strike price, string amendtime, string id, string parenti);
+        
+        records[id] = r;
+        if(type=='P'){
+            if(children.find(parentid)==children.end())
+                children[parentid] ={};
+            else
+            children[parentid].push_back(record);
+        }
+    }
+    
+    infile.close();
+    
+    int count = 0;
+    vector<record> vec;
+    int child = 0;
+    
+    for(auto &it : records){
+        string id = it.first;
+        record r = it.second;
+        
+        if(r.type == "T"){
+            vec.push_back(r);
+            
+            if(children.find(id)!=children.end()){
+                for(auto &it2 :children[id]){
+                    vec.push_back(it2);
+                    child++;
+                }
+            }
+        }
+        
+       if(child>=X){
+           ofstream outfile("output_"+to_string(count))+".txt");
+           count++;
+           for(int i=0;i<vec.size();i++){
+               outfile<<vec[i].type<<","<<
+           }
+           outfile.close();
+           vec = {};
+       } 
+          
+    }
+    
+    if(!vec.empty()){
+        ofstream outfile("output_"+to_string(count))+".txt");
+    }
+}
+
+
+
+int main() {
+    // Write C++ code here
+    
+    string input_file = "input.txt";
+    int X;
+    cin>>X;
+
+    splitInput(input_file, X);
+
+    return 0;
+}
+```
