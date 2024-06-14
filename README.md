@@ -258,7 +258,7 @@ void splitInput(string input_file, int X){
     ifstream infile(input_file);
     
     map<string, record> records;
-    map<string, vector<record>> children;
+    map<string, vector<string>> children;
     string line;
     
     while(getline(infile, line)){
@@ -280,47 +280,50 @@ void splitInput(string input_file, int X){
         
         records[id] = r;
         if(type=="P"){
-            children[parentid].push_back(r);
+            children[parentid].push_back(id);
+        }
+        else if(type=="T"){
+            if(children.find(id)==children.end())
+                children.insert({id, {}});
         }
     }
     
     infile.close();
-    
+
     int count = 0;
     vector<record> vec;
-    int child = 0;
+    int file = 0;
     
-    for(auto &it : records){
-        string id = it.first;
-        record r = it.second;
+    for(auto it : children){
+        string pid = it.first;
+        vector<string> rec = it.second;
+
+        vec.push_back(records[pid]);
+        count++;
         
-        if(r.type == "T"){
-            vec.push_back(r);
-            
-            if(children.find(id)!=children.end()){
-                for(auto &it2 :children[id]){
-                    vec.push_back(it2);
-                    child++;
-                }
-            }
+        for(int i=0;i<rec.size();i++){
+            vec.push_back(records[rec[i]]);
+            count++;
         }
         
-       if(child>=X){
-           ofstream outfile("output_"+to_string(count)+".txt");
-           count++;
+       if(count>=X){
+            file++;
+           ofstream outfile("output_"+to_string(file)+".txt");
            for(int i=0;i<vec.size();i++){
-               outfile<<vec[i].type<<","<<vec[i].symbol<<","<<vec[i].price<<","<<vec[i].quantity<<","<<vec[i].expiry_date<<","<<vec[i].strike_price<<","<<vec[i].amendtime<<","<<vec[i].id<<","<<vec[i].parentid;
+            if(vec[i].type!="")
+               outfile<<vec[i].type<<","<<vec[i].symbol<<","<<vec[i].price<<","<<vec[i].quantity<<","<<vec[i].expiry_date<<","<<vec[i].strike_price<<","<<vec[i].amendtime<<","<<vec[i].id<<","<<vec[i].parentid<<"\n";
            }
            outfile.close();
-           vec = {};
+           vec.clear();
+           count = 0;
        } 
           
     }
     
     if(!vec.empty()){
-        ofstream outfile("output_"+to_string(count)+".txt");
+        ofstream outfile("output_"+to_string(file)+".txt", ios::app);
         for(int i=0;i<vec.size();i++){
-               outfile<<vec[i].type<<","<<vec[i].symbol<<","<<vec[i].price<<","<<vec[i].quantity<<","<<vec[i].expiry_date<<","<<vec[i].strike_price<<","<<vec[i].amendtime<<","<<vec[i].id<<","<<vec[i].parentid;
+               outfile<<vec[i].type<<","<<vec[i].symbol<<","<<vec[i].price<<","<<vec[i].quantity<<","<<vec[i].expiry_date<<","<<vec[i].strike_price<<","<<vec[i].amendtime<<","<<vec[i].id<<","<<vec[i].parentid<<"\n";
          }
          outfile.close();
     }
