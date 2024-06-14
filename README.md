@@ -220,22 +220,41 @@ int main() {
 ```
 // Online C++ compiler to run C++ program online
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <map>
+#include <vector>
+
 using namespace std;
 
 struct record{
-    string type,
-    string symbol,
-    string price,
-    string quantity,
-    string expiry date,
-    string strike price,
-    string amendtime,
-    string id,
-    string parentid
+    string type;
+    string symbol;
+    string price;
+    string quantity;
+    string expiry_date;
+    string strike_price;
+    string amendtime;
+    string id;
+    string parentid;
+    
+    record(string t, string s, string p, string q, string e, string sp, string a, string i, string pi){
+        type = t;
+        symbol = s;
+        price = p;
+        quantity = q;
+        expiry_date = e;
+        strike_price = sp;
+        amendtime = a;
+        id = i;
+        parentid = pi;
+    }
+    
+    record() : type(""), symbol(""), price(""), quantity(""), expiry_date(""), strike_price(""), amendtime(""), id(""), parentid("") {}
 };
 
 
-void splitInpute(string input_file, int x){
+void splitInput(string input_file, int X){
     ifstream infile(input_file);
     
     map<string, record> records;
@@ -244,27 +263,24 @@ void splitInpute(string input_file, int x){
     
     while(getline(infile, line)){
         stringstream ss(line);
-        string type, symbol, price, quantity, expiry date, string strike price, string amendtime, string id, string parentid;
+        string type, symbol, price, quantity, expiry_date, strike_price, amendtime, id, parentid;
         
     
         getline(ss, type, ',');
         getline(ss, symbol, ',');
         getline(ss, price, ',');
         getline(ss, quantity, ',');
-        getline(ss, expiry date, ',');
-        getline(ss, strike price, ',');
+        getline(ss, expiry_date, ',');
+        getline(ss, strike_price, ',');
         getline(ss, amendtime, ',');
         getline(ss, id, ',');
         getline(ss, parentid, ',');
         
-        record r(type, symbol, price, quantity, expiry date, string strike price, string amendtime, string id, string parenti);
+        record r(type, symbol, price, quantity, expiry_date, strike_price,amendtime, id, parentid);
         
         records[id] = r;
-        if(type=='P'){
-            if(children.find(parentid)==children.end())
-                children[parentid] ={};
-            else
-            children[parentid].push_back(record);
+        if(type=="P"){
+            children[parentid].push_back(r);
         }
     }
     
@@ -290,10 +306,10 @@ void splitInpute(string input_file, int x){
         }
         
        if(child>=X){
-           ofstream outfile("output_"+to_string(count))+".txt");
+           ofstream outfile("output_"+to_string(count)+".txt");
            count++;
            for(int i=0;i<vec.size();i++){
-               outfile<<vec[i].type<<","<<
+               outfile<<vec[i].type<<","<<vec[i].symbol<<","<<vec[i].price<<","<<vec[i].quantity<<","<<vec[i].expiry_date<<","<<vec[i].strike_price<<","<<vec[i].amendtime<<","<<vec[i].id<<","<<vec[i].parentid;
            }
            outfile.close();
            vec = {};
@@ -302,7 +318,11 @@ void splitInpute(string input_file, int x){
     }
     
     if(!vec.empty()){
-        ofstream outfile("output_"+to_string(count))+".txt");
+        ofstream outfile("output_"+to_string(count)+".txt");
+        for(int i=0;i<vec.size();i++){
+               outfile<<vec[i].type<<","<<vec[i].symbol<<","<<vec[i].price<<","<<vec[i].quantity<<","<<vec[i].expiry_date<<","<<vec[i].strike_price<<","<<vec[i].amendtime<<","<<vec[i].id<<","<<vec[i].parentid;
+         }
+         outfile.close();
     }
 }
 
