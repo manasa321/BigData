@@ -218,16 +218,16 @@ int main() {
 
 # Q3 #
 ```
-// Online C++ compiler to run C++ program online
-#include <iostream>
+ #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <set>
 #include <vector>
 
 using namespace std;
 
-struct record{
+struct record {              //struct to store records information
     string type;
     string symbol;
     string price;
@@ -237,8 +237,8 @@ struct record{
     string amendtime;
     string id;
     string parentid;
-    
-    record(string t, string s, string p, string q, string e, string sp, string a, string i, string pi){
+
+    record(string t, string s, string p, string q, string e, string sp, string a, string i, string pi) {     //initialise record with values
         type = t;
         symbol = s;
         price = p;
@@ -249,24 +249,42 @@ struct record{
         id = i;
         parentid = pi;
     }
-    
-    record() : type(""), symbol(""), price(""), quantity(""), expiry_date(""), strike_price(""), amendtime(""), id(""), parentid("") {}
+
+
+    //default constructor
+    record() : type(""), symbol(""), price(""), quantity(""), expiry_date(""), strike_price(""), amendtime(""), id(""), parentid("") {
+    }
 };
 
+string trim(string str) {           //trim the extra spaces 
+    string s = "";
+    for(int i=0;i<str.length();i++){
+        if(str[i]=='\t' || str[i]=='\n' || str[i]=='\r' || str[i]=='\f' || str[i]=='\v'){
+            continue;
+        }
+        else{
+            s += str[i];
+        }
+    }
+    
+    return s;
+}
 
-void splitInput(string input_file, int X){
+
+//to split the input file into output files
+void splitInput(string input_file, int X) {
+
     ifstream infile(input_file);
-    
-    map<string, record> records;
-    map<string, vector<string>> children;
+
+    map<string, record> records;                // id mapped t0 complete record
+    map<string, vector<string>> children;        //parent id mapped to children ids
     string line;
-    
-    while(getline(infile, line)){
+
+    while (getline(infile, line)) {
         stringstream ss(line);
         string type, symbol, price, quantity, expiry_date, strike_price, amendtime, id, parentid;
-        
-    
-        getline(ss, type, ',');
+
+        getline(ss, type, ',');                 //read each entry delimited by comma
         getline(ss, symbol, ',');
         getline(ss, price, ',');
         getline(ss, quantity, ',');
@@ -274,72 +292,74 @@ void splitInput(string input_file, int X){
         getline(ss, strike_price, ',');
         getline(ss, amendtime, ',');
         getline(ss, id, ',');
-        getline(ss, parentid, ',');
+        getline(ss, parentid);
         
-        record r(type, symbol, price, quantity, expiry_date, strike_price,amendtime, id, parentid);
+        record r(type, symbol, price, quantity, expiry_date, strike_price, amendtime, id, parentid);
+    
+        records[id] = r;                //map id with record
+        parentid = trim(parentid);      //trim the extra spaces in parentid
         
-        records[id] = r;
-        if(type=="P"){
-            children[parentid].push_back(id);
-        }
-        else if(type=="T"){
-            if(children.find(id)==children.end())
-                children.insert({id, {}});
+        if (type == "P") {
+            if(children.find(parentid)!=children.end())     //map the parent id with its child
+                children[parentid].push_back(id);           
+            else{
+              children.insert({parentid, {id}});   
+            }
+        } else if (type == "T") {
+            if(children.find(id)==children.end())           //if parent id is not present, then create one to not miss parent without children
+                children[id] = {};
         }
     }
-    
+
+
     infile.close();
 
-    int count = 0;
+    int count = 0;                  //no of entries to be added in file
     vector<record> vec;
     int file = 0;
-    
-    for(auto it : children){
-        string pid = it.first;
-        vector<string> rec = it.second;
 
-        vec.push_back(records[pid]);
-        count++;
-        
-        for(int i=0;i<rec.size();i++){
-            vec.push_back(records[rec[i]]);
-            count++;
+    for (auto &it : children) {
+        string pid = it.first;
+        vector<string> rec = it.second;         //ids of children
+
+        vec.push_back(records[pid]);            //add the parent and then children
+        count++;        
+
+        for (int i = 0; i < rec.size(); i++) {
+                vec.push_back(records[rec[i]]);
+                count++;
         }
-        
-       if(count>=X){
+
+        if (count >= X) {
             file++;
-           ofstream outfile("output_"+to_string(file)+".txt");
-           for(int i=0;i<vec.size();i++){
-            if(vec[i].type!="")
-               outfile<<vec[i].type<<","<<vec[i].symbol<<","<<vec[i].price<<","<<vec[i].quantity<<","<<vec[i].expiry_date<<","<<vec[i].strike_price<<","<<vec[i].amendtime<<","<<vec[i].id<<","<<vec[i].parentid<<"\n";
-           }
-           outfile.close();
-           vec.clear();
-           count = 0;
-       } 
-          
+            ofstream outfile("output_" + to_string(file) + ".txt");
+            for (int i = 0; i < vec.size(); i++) {
+                outfile << vec[i].type << "," << vec[i].symbol << "," << vec[i].price << "," << vec[i].quantity << "," << vec[i].expiry_date << "," << vec[i].strike_price << "," << vec[i].amendtime << "," << vec[i].id << "," << vec[i].parentid << "\n";
+            }
+            outfile.close();
+            vec.clear();           
+            count = 0;
+        }
     }
-    
-    if(!vec.empty()){
-        ofstream outfile("output_"+to_string(file)+".txt", ios::app);
-        for(int i=0;i<vec.size();i++){
-               outfile<<vec[i].type<<","<<vec[i].symbol<<","<<vec[i].price<<","<<vec[i].quantity<<","<<vec[i].expiry_date<<","<<vec[i].strike_price<<","<<vec[i].amendtime<<","<<vec[i].id<<","<<vec[i].parentid<<"\n";
-         }
-         outfile.close();
+
+    if (!vec.empty()) {                 //append to the last output file when no.of entries is less than X
+        ofstream outfile("output_" + to_string(file) + ".txt", ios::app);
+        for (int i = 0; i < vec.size(); i++) {
+            outfile << vec[i].type << "," << vec[i].symbol << "," << vec[i].price << "," << vec[i].quantity << "," << vec[i].expiry_date << "," << vec[i].strike_price << "," << vec[i].amendtime << "," << vec[i].id << "," << vec[i].parentid << "\n";
+        }
+        outfile.close();
     }
 }
 
-
-
 int main() {
-    // Write C++ code here
-    
     string input_file = "input.txt";
     int X;
-    cin>>X;
+    cout << "Enter the value of X: ";
+    cin >> X;
 
     splitInput(input_file, X);
 
     return 0;
 }
+
 ```
